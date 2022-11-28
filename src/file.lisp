@@ -3,6 +3,7 @@
   (:use :cl)
   (:export :*ceramic-directory*
            :release-directory
+           :resource-directory
            :wipe-data)
   (:documentation "Ceramic's files and directory utilities."))
 (in-package :ceramic.file)
@@ -18,3 +19,7 @@
 (defun wipe-data ()
   "Wipe all Ceramic related data."
   (uiop:delete-directory-tree *ceramic-directory* :validate t))
+
+(defun resource-directory ()
+  (merge-pathnames (release-directory) #p"resources")
+  "The directory where Ceramic resource stores its files.")

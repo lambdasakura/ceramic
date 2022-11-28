@@ -65,13 +65,28 @@
                                         (app-directory directory
                                                        :operating-system operating-system))))
 
+(defun insert-default-asar (directory)
+  (log-message "Delete default asar file")
+  (when (probe-file  (merge-pathnames  #p"resources/default_app.asar" directory))
+    (delete-file (merge-pathnames  #p"resources/default_app.asar" directory)))
+  
+  (log-message "Generate default asar file")
+  (let ((command (format nil "asar pack ~a ~a" 
+                      (merge-pathnames #p"resources/default_app/" directory)
+                      (merge-pathnames  #p"resources/default_app.asar" directory))))
+      (uiop:run-program command :output *standard-output*
+                                :error :output
+                                :ignore-error-status t)))
+
 (defun prepare-release (directory &key operating-system)
   "Prepare an Electron release."
   (ensure-directories-exist (app-directory directory :operating-system operating-system))
   (clean-release directory :operating-system operating-system)
   (insert-javascript directory :operating-system operating-system)
   (insert-package-definition directory :operating-system operating-system)
-  (copy-ws-module directory :operating-system operating-system))
+  (copy-ws-module directory :operating-system operating-system)
+  (insert-default-asar directory)
+  (uiop:delete-directory-tree (app-directory directory :operating-system operating-system) :validate t))
 
 ;;; Main
 
