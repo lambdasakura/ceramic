@@ -118,4 +118,6 @@
              (progn
                ,@body
                (loop (sleep 1)))
-           (t () (quit)))))))
+           (error (c) 
+             (format t "Error Condition: ~A~%" c)
+             (quit)))))))
