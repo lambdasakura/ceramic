@@ -80,7 +80,8 @@ most people can unzip)."
                                 (format nil "(ceramic-entry::~A)"
                                         (string-downcase
                                          (symbol-name system-name)))
-                                executable-pathname)
+                              executable-pathname
+                              :application-type :gui)         
            ;; Compress the folder
            (when (probe-file bundle-pathname)
              (log-message "Found existing bundle, deleting...")
